@@ -170,11 +170,14 @@ if uploaded is not None:
             model_id = "google/gemma-2b-it"
             token = os.getenv("HF_TOKEN")
             client = InferenceClient(model=model_id, token=token)
-            return client.text_generation(
-                prompt,
-                max_new_tokens=100,
+            # Use the conversational endpoint for generation
+            messages = [{"role": "user", "content": prompt}]
+            response = client.chat_completion(
+                messages,
+                max_tokens=100,
                 temperature=temperature,
             )
+            return response.choices[0].message.content
 
         messages = []
         if use_llm and (msg_kw_list or prod_kw_list):
