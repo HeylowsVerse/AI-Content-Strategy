@@ -5,3 +5,4 @@ scikit-learn
 torch
 transformers
 tabulate
+huggingface-hub

@@ -158,25 +158,23 @@ if uploaded is not None:
             for p in prods:
                 selected_variants.append((i, p))
 
-        def generate_text(prompt):
-            from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+        def generate_text(prompt: str) -> str:
+            """Generate text using the Gemma model via the Hugging Face Hub.
+
+            Requires the ``HF_TOKEN`` environment variable to be set with a
+            token that has access to ``google/gemma-2b-it``.
+            """
+            import os
+            from huggingface_hub import InferenceClient
 
             model_id = "google/gemma-2b-it"
-            tokenizer = AutoTokenizer.from_pretrained(model_id)
-            model = AutoModelForCausalLM.from_pretrained(model_id)
-            pipe = pipeline(
-                "text-generation",
-                model=model,
-                tokenizer=tokenizer,
-                device_map="auto",
-            )
-            out = pipe(
+            token = os.getenv("HF_TOKEN")
+            client = InferenceClient(model=model_id, token=token)
+            return client.text_generation(
                 prompt,
                 max_new_tokens=100,
-                do_sample=True,
                 temperature=temperature,
             )
-            return out[0]["generated_text"]
 
         messages = []
         if use_llm and (msg_kw_list or prod_kw_list):
