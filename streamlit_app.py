@@ -112,10 +112,12 @@ if uploaded is not None:
     msg_keywords = st.text_input(
         "Keywords or context for marketing messages",
         key="msg_kw",
+        placeholder="Best bank for SMEs",
     )
     prod_keywords = st.text_input(
         "Keywords or context for product propositions",
         key="prod_kw",
+        placeholder="Low-fee business banking",
     )
     msg_kw_list = [k.strip() for k in re.split(r"[,\n]+", msg_keywords) if k.strip()]
     prod_kw_list = [k.strip() for k in re.split(r"[,\n]+", prod_keywords) if k.strip()]
@@ -198,9 +200,38 @@ if uploaded is not None:
                 )
             prod_text = "\n\n".join(prod_summary_texts)
             prompt = (
-                f"You are a marketing strategist. Based on the following cluster summaries, propose {num_message_variants} short marketing message variants for each industry cluster using the keywords: {', '.join(msg_kw_list)}. "
-                f"Also propose {num_product_props} product propositions for each product cluster using the keywords: {', '.join(prod_kw_list)}.\n\n"
-                f"Industry clusters:\n{ind_summary_text}\n\nProduct clusters:\n{prod_text}"
+                f"You are a seasoned content strategist and content creator for a financial services company targeting SME audiences. "
+                f"Your task is to develop compelling, high-impact content that aligns with the specified industry and product clusters. "
+                f"Use the provided keyword sets to craft messaging and propositions that are relevant, engaging, and conversion-oriented.\n\n"
+
+                f"🔹 For each industry cluster listed below, generate {num_message_variants} short marketing message variants. "
+                f"Each message should:\n"
+                f"- Incorporate at least one of the following marketing keywords: {', '.join(msg_kw_list)}\n"
+                f"- Reflect a tone of voice suitable for SME decision-makers (clear, benefit-driven, and concise)\n"
+                f"- Be no longer than 25 words\n\n"
+
+                f"🔹 For each product cluster, propose {num_product_props} concise product proposition statements. "
+                f"Each proposition should:\n"
+                f"- Use one or more of these product-related keywords: {', '.join(prod_kw_list)}\n"
+                f"- Highlight key business outcomes, not just features (e.g., 'improve cash flow', 'simplify operations')\n"
+                f"- Be phrased in a benefit-first, SME-friendly tone\n"
+                f"- Stay under 30 words\n\n"
+
+                f"=== INPUTS ===\n\n"
+                f"📊 Industry Clusters:\n{ind_summary_text}\n\n"
+                f"📦 Product Clusters:\n{prod_text}\n\n"
+                f"=== OUTPUT FORMAT ===\n\n"
+                f"For each industry cluster:\n"
+                f"- [Industry Name/Tag]\n"
+                f"  1. Message variant 1\n"
+                f"  2. Message variant 2\n"
+                f"  ...\n\n"
+
+                f"For each product cluster:\n"
+                f"- [Product Name/Tag]\n"
+                f"  1. Proposition 1\n"
+                f"  2. Proposition 2\n"
+                f"  ...\n"
             )
             try:
                 generated = generate_text(prompt)
@@ -219,5 +250,8 @@ if uploaded is not None:
 
         if messages:
             st.subheader("AI Suggestions")
-            for m in messages:
-                st.write("-", m)
+            suggestions_md = "\n".join(f"- {m}" for m in messages)
+            st.markdown(
+                f"<div style='max-height: 200px; overflow-y: auto'>{suggestions_md}</div>",
+                unsafe_allow_html=True,
+            )
