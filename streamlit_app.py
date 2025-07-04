@@ -176,7 +176,7 @@ if uploaded is not None:
             messages = [{"role": "user", "content": prompt}]
             response = client.chat_completion(
                 messages,
-                max_tokens=100,
+                max_tokens=500,
                 temperature=temperature,
             )
             return response.choices[0].message.content
