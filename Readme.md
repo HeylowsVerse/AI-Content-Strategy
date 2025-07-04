@@ -8,7 +8,7 @@ This project provides a simple Streamlit application for running marketing exper
 - Automatically determines cluster counts for the `industry` column and for the `product` column inside each industry cluster.
 - Performs clustering with K-means and summarises each industry cluster by total amount, average credit score and average tenure, ranking them by total amount.
 - Allows you to pick how many of the ranked industry and product clusters to include when configuring the experiment.
-- Lets you provide separate keywords for marketing messages and product propositions, specify how many of each to generate, adjust a creative temperature slider and optionally generate suggestions using the **Gemma-2B-IT** model hosted on Hugging Face.
+- Lets you provide separate keywords for marketing messages and product propositions, specify how many of each to generate, adjust a creative temperature slider and optionally generate suggestions using the **Gemma-2B-IT** model hosted on Hugging Face (requires setting ``HF_TOKEN``).
 - Randomly assigns customers to message variants.
 
 ## Usage
@@ -34,4 +34,4 @@ automatically normalised to lowercase after upload.
 
 Follow the on-screen instructions to explore clusters, configure your experiment, provide message and product keywords separately and (optionally) generate AI-powered content suggestions.
 
-Gemma model generation requires internet access and may take a long time on first run.
+Gemma model generation requires internet access and an access token for the model on Hugging Face. Set the ``HF_TOKEN`` environment variable with your token before running the app. Generation may take a long time on first run.
