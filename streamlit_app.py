@@ -176,7 +176,7 @@ if uploaded is not None:
             messages = [{"role": "user", "content": prompt}]
             response = client.chat_completion(
                 messages,
-                max_tokens=500,
+                max_tokens=1000,
                 temperature=temperature,
             )
             return response.choices[0].message.content
@@ -241,7 +241,7 @@ if uploaded is not None:
 
         if messages:
             st.subheader("AI Suggestions")
-            suggestions_md = "\n".join(f"- {m}" for m in messages)
+            suggestions_md = "\n\n".join(messages)
             st.markdown(
                 f"<div style='max-height: 500px; overflow-y: auto'>{suggestions_md}</div>",
                 unsafe_allow_html=True,
