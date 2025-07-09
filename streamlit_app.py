@@ -243,6 +243,6 @@ if uploaded is not None:
             st.subheader("AI Suggestions")
             suggestions_md = "\n\n".join(messages)
             st.markdown(
-                f"<div style='max-height: 500px; overflow-y: auto'>{suggestions_md}</div>",
+                suggestions_md,
                 unsafe_allow_html=True,
             )
