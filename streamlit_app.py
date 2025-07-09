@@ -109,18 +109,29 @@ if uploaded is not None:
         selected_prod[i] = n_prod
         st.dataframe(prod_summary)
 
-    msg_keywords = st.text_input(
-        "Keywords or context for marketing messages",
-        key="msg_kw",
-        placeholder="Best bank for SMEs",
+    # --- Updated keyword input and multiselect ---
+    raw_msg_keywords = st.text_input(
+        "Enter keywords or context for marketing messages (comma-separated)",
+        key="raw_msg_kw",
+        placeholder="Best bank for SMEs, digital banking, business growth",
     )
-    prod_keywords = st.text_input(
-        "Keywords or context for product propositions",
-        key="prod_kw",
-        placeholder="Low-fee business banking",
+    raw_prod_keywords = st.text_input(
+        "Enter keywords or context for product propositions (comma-separated)",
+        key="raw_prod_kw",
+        placeholder="Low-fee business banking, fast approval, cash flow support",
     )
-    msg_kw_list = [k.strip() for k in re.split(r"[,\n]+", msg_keywords) if k.strip()]
-    prod_kw_list = [k.strip() for k in re.split(r"[,\n]+", prod_keywords) if k.strip()]
+
+    msg_kw_options = [k.strip() for k in re.split(r"[,\n]+", raw_msg_keywords) if k.strip()]
+    prod_kw_options = [k.strip() for k in re.split(r"[,\n]+", raw_prod_keywords) if k.strip()]
+
+    msg_kw_list = st.multiselect(
+        "Select keywords for marketing messages", options=msg_kw_options, default=msg_kw_options
+    )
+    prod_kw_list = st.multiselect(
+        "Select keywords for product propositions", options=prod_kw_options, default=prod_kw_options
+    )
+    # --- End update ---
+
     num_message_variants = st.number_input(
         "Number of message variants per industry cluster",
         min_value=1,
@@ -208,14 +219,14 @@ if uploaded is not None:
                 f"Each message should:\n"
                 f"- Incorporate at least one of the following marketing keywords: {', '.join(msg_kw_list)}\n"
                 f"- Reflect a tone of voice suitable for SME decision-makers (clear, benefit-driven, and concise)\n"
-                f"- Be no longer than 50 words\n\n"
+                f"- Be no longer than 100 words\n\n"
 
                 f"For each product cluster, propose {num_product_props} concise product proposition statements. "
                 f"Each proposition should:\n"
                 f"- Use one or more of these product-related keywords: {', '.join(prod_kw_list)}\n"
                 f"- Highlight key business outcomes, not just features (e.g., 'improve cash flow', 'simplify operations')\n"
                 f"- Be phrased in a benefit-first, SME-friendly tone\n"
-                f"- Stay under 50 words\n\n"
+                f"- Stay under 100 words\n\n"
 
                 f"=== INPUTS ===\n\n"
                 f" Industry Clusters:\n{ind_summary_text}\n\n"
